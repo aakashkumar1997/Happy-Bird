@@ -6,8 +6,10 @@ $(function () {
     var pole1 = $('#pole1');
     var pole2 = $('#pole2');
     var score_span = $('#score');
+    var highscore_span = $('#highscore');
     var speed_span = $('#speed');
     var restart_btn = $('#restart_btn');
+    var highscore_tag = $('#highscore_tag');
     
     var container_width = parseInt(container.width());
     var container_height = parseInt(container.height());
@@ -19,11 +21,13 @@ $(function () {
     var go_up = false;
     var speed = 20;
     var score = 0;
+    var highscore =  parseInt(localStorage.getItem("highscore"));
     var flag = true;
     var game_over = false;
     
     speed_span.text(speed);
     score_span.text(score);
+    highscore_span.text(highscore);
     
     var the_game = setInterval(function () {
         if(collision(bird,  pole1) || collision(bird , pole2) || parseInt(bird.css('top')) <= 0 || parseInt(bird.css('top')) >= container_height - bird_height){
@@ -36,6 +40,18 @@ $(function () {
             if(container_width - bird_left < pole_current_position && flag){
                 score = score + 1;
                 speed = speed + 1;
+                if(score === highscore){
+                    highscore_tag.slideDown();
+                    var check = setInterval(function()  {  highscore_tag.slideUp() } , 1500);
+                }
+                if(score > highscore && highscore !== null){
+                    highscore++;
+                    localStorage.setItem("highscore" , highscore);
+                }
+                if(highscore === null){
+                    localStorage.setItem("highscore" , score);
+                }
+                highscore_span.text(highscore);
                 score_span.text(score);
                 speed_span.text(speed);
                 flag = false;
