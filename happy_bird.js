@@ -24,6 +24,16 @@ $(function () {
     var highscore =  parseInt(localStorage.getItem("highscore"));
     var flag = true;
     var game_over = false;
+    var times = true;
+    var if_first_time = false;
+
+
+    if(0 * highscore !== 0){
+        localStorage.setItem("highscore" , 0);
+        highscore = 0;
+        if_first_time = true;
+    }
+    
     
     speed_span.text(speed);
     score_span.text(score);
@@ -35,22 +45,31 @@ $(function () {
             game_over = true;
         }
         else{
-            var pole_current_position = parseInt(pole.css('right'));
-            
+            var pole_current_position = parseInt(pole.css('right'));            
             if(container_width - bird_left < pole_current_position && flag){
                 score = score + 1;
                 speed = speed + 1;
-                if(score === highscore){
-                    highscore_tag.slideDown();
-                    var check = setInterval(function()  {  highscore_tag.slideUp() } , 1500);
-                }
-                if(score > highscore && highscore !== null){
+                score_span.text(score);
+                speed_span.text(speed);
+                if(score > highscore && highscore !== null && highscore !== NaN){
+                    
+                    if(score === highscore + 1 && times){
+                        if(!if_first_time){
+                            highscore_tag.slideDown();
+                            var check = setInterval(function()  {  highscore_tag.slideUp() } , 1500);
+                        }
+                        times = false;
+                    }
+                    
                     highscore++;
+                    highscore_span.text(highscore);
                     localStorage.setItem("highscore" , highscore);
                 }
-                if(highscore === null){
+                
+                if(highscore === null || highscore === NaN){
                     localStorage.setItem("highscore" , score);
                 }
+                
                 highscore_span.text(highscore);
                 score_span.text(score);
                 speed_span.text(speed);
